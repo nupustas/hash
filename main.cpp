@@ -24,21 +24,31 @@ int main() {
 }
 
 string hashas(const std::string &input) {
-    std::array<uint32_t, 8> state = {
-        0x12345678u, 0x9abcdef0u, 0x0fedcba9u, 0x87654321u,
-        0xf0e1d2c3u, 0x4b5a6978u, 0x11223344u, 0x55667788u
+    std::array<uint64_t, 4> state = {
+        0xabcdef1234567890u, 0xfedcba9876543210u,
+        0xa12b34c56d78e90fu, 0xa1b2c3d4e5f60708u
     };
-
+    // sumaiso stringo charus i visus 4 states.
     for (size_t i = 0; i < input.size(); i++) {
         uint8_t c = static_cast<uint8_t>(input[i]);
-        state[i % 8] ^= (c * 0x01010101u);  
-        state[(i + 1) % 8] += (c << (i % 24));
+        state[i % 4] ^= (static_cast<uint64_t>(c) * 0x0101010101010101u);  
+        state[(i + 1) % 4] += (static_cast<uint64_t>(c) << (i % 56));
+    }
+    // kiekvienas state paveikia kitus
+    for (int i = 0; i < 4; i++) {
+        state[i] ^= state[(i + 1) % 4];
+        state[i] *= 3;
+    }
+    // dar daugiau sumaisymo
+    for (int i = 0; i < 4; i++) {
+        state[i] = state[i] + state[(i + 2) % 4];
+        state[i] = state[i] ^ (state[i] >> 16);
     }
 
-    // konvertuoja 8x32bit i 256bit hash stringa
-    std::ostringstream oss;
-    for (uint32_t v : state) {
-        oss << std::hex << std::setw(8) << std::setfill('0') << v;
+    // convert 4x64bit = 256bit i 64 simboliu hex stringa
+    std::ostringstream of;
+    for (uint64_t v : state) {
+        of << std::hex << std::setw(16) << std::setfill('0') << v;
     }
-    return oss.str();
+    return of.str();
 }

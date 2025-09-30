@@ -6,6 +6,8 @@
 #include <sstream>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
+#include <chrono>
 
 using namespace std;
 string hashas(const std::string &input);
@@ -23,6 +25,10 @@ int main() {
 
     int choice;
     cin >> choice;
+    if(choice < 1 || choice > 3) {
+        cout << "Invalid choice. Try again" << endl;
+        cin>> choice;
+    }
 
     switch (choice) {
         case 1: {
@@ -34,9 +40,34 @@ int main() {
             break;
         }
         case 2: {
+
             string filename;
             cout << "Enter filename: ";
             cin >> filename;
+            ifstream file(filename);
+            if (!file) {
+                cerr << "Error opening file." << endl;
+                return 1;
+            }
+            ofstream fr("hashed_output.txt");
+            if (!fr) {
+                cerr << "Error creating output file." << endl;
+                return 1;
+            }
+            int x;
+            cout << "Enter number of lines to read: ";
+            cin >> x;
+             auto start = chrono::high_resolution_clock::now();
+            string line;
+            for (int i=0; i<x; i++) {
+                getline(file, line);
+                string hashed = hashas(line);
+                fr<<i<< " | Hashed: " << hashed << endl;
+            }
+            auto end = chrono::high_resolution_clock::now();
+            chrono::duration<double> elapsed = end - start;
+            cout << "Time taken to hash " << x << " lines: " << elapsed.count() << " seconds" << endl;
+            
 
             break;
         }
@@ -71,7 +102,7 @@ string hashas(const std::string &input) {
         state[i] ^= state[(i + 1) % 4];
         state[i] *= 3;
     }
-    // dar daugiau sumaisymo
+    // dar daugiau sumaisymo tarp states
     for (int i = 0; i < 4; i++) {
         state[i] = state[i] + state[(i + 2) % 4];
         state[i] = state[i] ^ (state[i] >> 16);
@@ -87,7 +118,7 @@ string hashas(const std::string &input) {
 int collisions(int length)
 {   
     int count = 0;
-    for(int i=0;i<100000;i++)
+    for(int i=0;i<1000000;i++)
     {
         string h1 = hashas(generateString(length));
         string h2 = hashas(generateString(length));

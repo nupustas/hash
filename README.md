@@ -89,3 +89,6 @@ Grąžinti 64 simbolių hex string'ą
 | 100            |     0        |
 | 500            |     0        |
 | 1000           |     0        |
+
+## Lavinos efekto testas
+![alt text](image.png)

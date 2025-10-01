@@ -8,11 +8,15 @@
 #include <ctime>
 #include <fstream>
 #include <chrono>
+#include <numeric>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 string hashas(const std::string &input);
 int collisions(int length);
 string generateString(int length);
+void avalancheEffect();
 
 
 int main() {
@@ -22,11 +26,12 @@ int main() {
     cout<<"(1) Input string"<<endl;
     cout<<"(2) Input from a file"<<endl;
     cout<<"(3) Check for collisions"<<endl;
+    cout<<"(4) Avalanche effect"<<endl;
 
     int choice;
     cin >> choice;
 
-    if(choice < 1 || choice > 3) {
+    if(choice < 1 || choice > 4) {
         cout << "Invalid choice. Try again" << endl;
         cin>> choice;
     }
@@ -86,7 +91,10 @@ int main() {
             cout << "Number of collisions: " << collisionCount << endl;
             break;
         }
-        
+        case 4: {
+            avalancheEffect();
+            break;
+        }
         default:
             cout << "Invalid choice." << endl;
             break;
@@ -149,3 +157,42 @@ string generateString(int length) {
     return result;
 }
 
+void avalancheEffect() {
+    const int PAIRS = 100000;
+    vector<double> bitDiffs, hexDiffs;
+    
+    for (int i = 0; i < PAIRS; i++) {
+        string s1 = generateString(15), s2 = s1;
+        int pos = rand() % s2.length();
+        char originalChar = s2[pos];
+        char newChar;
+        do {
+            newChar = 'a' + rand() % 26;
+        } while (newChar == originalChar); 
+        
+        s2[pos] = newChar;
+        
+        string h1 = hashas(s1);
+        string h2 = hashas(s2);
+
+        int bitDiff = 0, hexDiff = 0;
+        for (int j = 0; j < 64; j++) {
+            if (h1[j] != h2[j]) hexDiff++;
+            int v1 = h1[j] > '9' ? h1[j] - 'a' + 10 : h1[j] - '0';
+            int v2 = h2[j] > '9' ? h2[j] - 'a' + 10 : h2[j] - '0';
+            bitDiff += __builtin_popcount(v1 ^ v2);//suskaiciuoja kiek bitu skiriasi
+        }
+        
+        bitDiffs.push_back(bitDiff * 100.0 / 256);
+        hexDiffs.push_back(hexDiff * 100.0 / 64);
+    }
+    
+    auto [minBit, maxBit] = minmax_element(bitDiffs.begin(), bitDiffs.end());
+    auto [minHex, maxHex] = minmax_element(hexDiffs.begin(), hexDiffs.end());
+    
+    double avgBit = accumulate(bitDiffs.begin(), bitDiffs.end(), 0.0) / PAIRS;
+    double avgHex = accumulate(hexDiffs.begin(), hexDiffs.end(), 0.0) / PAIRS;
+
+    cout << "min bits diff: " << *minBit << "% - max bits diff: " << *maxBit << "% (avg bits diff: " << avgBit << "%)\n";
+    cout << "min hex diff: " << *minHex << "% - max hex diff: " << *maxHex << "% (avg hex diff: " << avgHex << "%)\n";
+}

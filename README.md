@@ -14,14 +14,14 @@ Sukurti state[4] masyvą su pradinėmis reikšmėmis, hasho 'atminčiai':
 ### 1 ETAPAS - Simbolių apdorojimas:
 ```
 Kiekvienam simboliui įvestyje:
-    c = simbolio ASCII kodas (0-255)
+    ascii = simbolio ASCII kodas (0-255)
     pozicija = simbolio numeris mod 4
     
-    state[pozicija] XOR= (c * 0x0101010101010101)
+    state[pozicija] XOR= (ascii * 0x0101010101010101)
     
     kita_pozicija = (pozicija + 1) mod 4
     shift_kiekis = simbolio_numeris mod 56
-    state[kita_pozicija] += (c << shift_kiekis)
+    state[kita_pozicija] += (ascii << shift_kiekis)
 ```
 
 ### 2 ETAPAS - Tarpusavio maišymas:
@@ -69,3 +69,13 @@ Grąžinti 64 simbolių hex string'ą
 | 256      | 0.00214 | 
 | 512      | 0.00322 | 
 | 789      | 0.00936 | 
+
+## Kolizijų paieška iš 100 000 porų
+| 'String' ilgis | Kolizijų sk. |
+| --------       | -------      | 
+| 2              |   243        |
+| 5              |     0        |
+| 10             |     0        |
+| 100            |     0        |
+| 500            |     0        |
+| 1000           |     0        |

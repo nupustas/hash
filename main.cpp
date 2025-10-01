@@ -93,9 +93,9 @@ string hashas(const std::string &input) {
     };
     // sumaiso stringo charus i visus 4 states.
     for (size_t i = 0; i < input.size(); i++) {
-        uint8_t c = static_cast<uint8_t>(input[i]);
-        state[i % 4] ^= (static_cast<uint64_t>(c) * 0x0101010101010101u);  
-        state[(i + 1) % 4] += (static_cast<uint64_t>(c) << (i % 56));
+        uint8_t ascii = static_cast<uint8_t>(input[i]);
+        state[i % 4] ^= (static_cast<uint64_t>(ascii) * 0x0101010101010101u);  
+        state[(i + 1) % 4] += (static_cast<uint64_t>(ascii) << (i % 56));
     }
     // kiekvienas state paveikia kitus
     for (int i = 0; i < 4; i++) {

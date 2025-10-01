@@ -25,6 +25,7 @@ int main() {
 
     int choice;
     cin >> choice;
+
     if(choice < 1 || choice > 3) {
         cout << "Invalid choice. Try again" << endl;
         cin>> choice;
@@ -37,10 +38,14 @@ int main() {
             cin >> input;
             string hashed = hashas(input);
             cout << "Hashed string: " << hashed << endl;
+            ofstream fs("a1111.txt");
+            /*for(int x=0;x<1111;x++)
+            {
+                fs<<generateString(1);
+            }*/
             break;
         }
         case 2: {
-
             string filename;
             cout << "Enter filename: ";
             cin >> filename;
@@ -49,25 +54,27 @@ int main() {
                 cerr << "Error opening file." << endl;
                 return 1;
             }
-            ofstream fr("hashed_output.txt");
-            if (!fr) {
-                cerr << "Error creating output file." << endl;
-                return 1;
-            }
+
             int x;
             cout << "Enter number of lines to read: ";
             cin >> x;
-             auto start = chrono::high_resolution_clock::now();
-            string line;
-            for (int i=0; i<x; i++) {
+            //ofstream fr("hash_test.txt");
+            auto start = chrono::high_resolution_clock::now();
+
+            string line, combined;
+            for (int i = 0; i < x; i++) {
                 getline(file, line);
-                string hashed = hashas(line);
-                fr<<i<< " | Hashed: " << hashed << endl;
+                //fr << line << endl;
+                combined += line + "\n";  // preserve line breaks
             }
+
+            string hashed = hashas(combined); // hash the entire combined string
+            cout << "Hashed block: " << hashed << endl;
+
             auto end = chrono::high_resolution_clock::now();
             chrono::duration<double> elapsed = end - start;
-            cout << "Time taken to hash " << x << " lines: " << elapsed.count() << " seconds" << endl;
-            
+            cout << "Time taken to hash " << x << " lines: " 
+                << elapsed.count() << " seconds" << endl;
 
             break;
         }
@@ -79,6 +86,7 @@ int main() {
             cout << "Number of collisions: " << collisionCount << endl;
             break;
         }
+        
         default:
             cout << "Invalid choice." << endl;
             break;
@@ -140,3 +148,4 @@ string generateString(int length) {
     
     return result;
 }
+

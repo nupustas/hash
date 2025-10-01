@@ -11,7 +11,7 @@ Sukurti state[4] masyvą su pradinėmis reikšmėmis, hasho 'atminčiai':
     state[3] = 0xa1b2c3d4e5f60708
 ```
 
-### 1 ETAPAS - Simbolių apdorojimas:
+### 1 MAIŠYMO ETAPAS - Simbolių apdorojimas:
 ```
 Kiekvienam simboliui įvestyje:
     ascii = simbolio ASCII kodas (0-255)
@@ -51,24 +51,32 @@ Kiekvienam state masyvo elementui:
 
 Grąžinti 64 simbolių hex string'ą
 ```
+# Tyrimai
+## Išvedimo dydis
+* Nesvarbu kokio ilgio įvestis, išvestis visuomet gaunama 64 simboliu hex formatu
+| Įvestis | Išvestis | 
+| labas | 8d1eed0a380a626adeb8d2edd26ebb2c97ef5eae13f5d384a69391ba5f33c253 | 
+| Labas | 2cbdd30e080df40aba9997ee906ea9ee378e98cb05f230675e55431919b44db3 | 
+| 'Konstitucija.txt' | 41095fbb83160526352bd1686947b43899efb055ff532512b6d5ceb1ccbf417 | 
+| 'a.txt' | bd3c1ce4b4303af7528e59e20bb09e16bf0abd134fc448a5a3237b6b015011c0 | 
+| 'b.txt' | 65b55b1fb6e44f710e7b757739bb6d028571d7036c00c2a2bb5eb843ea40202f | 
 
-
-
-
-
-
+## Determiniškumas
+* 
+![Determiniškumas](image-1.png)
 
 ## Efektyvumo testas naudojant 'Konstitucija.txt'
-| Eil. sk. | Laikas (s) |
-| -------- | ------- | 
-| 8        | 0.00034 |
-| 16       | 0.00036 |
-| 32       | 0.00075 | 
-| 64       | 0.00059 |
-| 128      | 0.00098 |
-| 256      | 0.00214 | 
-| 512      | 0.00322 | 
-| 789      | 0.00936 | 
+| Eil. sk. | 'hashas' (s) | 
+| -------- | ------- |  
+| 8        | 0.00090 | 
+| 16       | 0.00051 | 
+| 32       | 0.00079 | 
+| 64       | 0.00035 | 
+| 128      | 0.00035 |
+| 256      | 0.00045 |
+| 512      | 0.00086 |
+| 789      | 0.00122 |
+
 
 ## Kolizijų paieška iš 100 000 porų
 | 'String' ilgis | Kolizijų sk. |

@@ -55,6 +55,7 @@ Grąžinti 64 simbolių hex string'ą
 ## Išvedimo dydis
 * Nesvarbu kokio ilgio įvestis, išvestis visuomet gaunama 64 simboliu hex formatu
 | Įvestis | Išvestis | 
+| ------- | -------- | 
 | labas | 8d1eed0a380a626adeb8d2edd26ebb2c97ef5eae13f5d384a69391ba5f33c253 | 
 | Labas | 2cbdd30e080df40aba9997ee906ea9ee378e98cb05f230675e55431919b44db3 | 
 | 'Konstitucija.txt' | 41095fbb83160526352bd1686947b43899efb055ff532512b6d5ceb1ccbf417 | 

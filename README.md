@@ -9,10 +9,8 @@ Sukurti state[4] masyvą su pradinėmis reikšmėmis, hasho 'atminčiai':
     state[1] = 0xfedcba9876543210  
     state[2] = 0xa12b34c56d78e90f
     state[3] = 0xa1b2c3d4e5f60708
-```
 
-### 1 MAIŠYMO ETAPAS - Simbolių apdorojimas:
-```
+//pirmas maišymas
 Kiekvienam simboliui įvestyje:
     ascii = simbolio ASCII kodas (0-255)
     pozicija = simbolio numeris mod 4
@@ -22,35 +20,27 @@ Kiekvienam simboliui įvestyje:
     kita_pozicija = (pozicija + 1) mod 4
     shift_kiekis = simbolio_numeris mod 56
     state[kita_pozicija] += (ascii << shift_kiekis)
-```
 
-### 2 ETAPAS - Tarpusavio maišymas:
-```
+// antras maišymas
 Kiekvienam i nuo 0 iki 3:
     // Cirkuliarinis maišymas (0->1->2->3->0)
     state[i] XOR= state[(i+1) mod 4]
     
     state[i] *= 3
-```
-
-### 3 ETAPAS - Diagonalinis maišymas:
-```
+// trečias maišymas
 Kiekvienam i nuo 0 iki 3:
     // Diagonalinis maišymas (0->2, 1->3)
     state[i] += state[(i+2) mod 4]
     
-    // Aukštųjų ir žemųjų bitų maišymas
     state[i] XOR= (state[i] >> 16)
-```
 
-### 4 ETAPAS - Konvertavimas į hex string'ą:
-```
 Kiekvienam state masyvo elementui:
     Konvertuoti į 16 simbolių hex string'ą
     Pridėti prie rezultato
 
 Grąžinti 64 simbolių hex string'ą
 ```
+
 # Tyrimai
 ## Išvedimo dydis
 * Nesvarbu kokio ilgio įvestis, išvestis visuomet gaunama 64 simboliu hex formatu
